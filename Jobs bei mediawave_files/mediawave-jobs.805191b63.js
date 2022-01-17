@@ -19981,6 +19981,8 @@ Webflow.define('forms', module.exports = function ($, _) {
     var RADIO_INPUT_CLASS_NAME = '.w-radio-input';
     var CHECKED_CLASS = 'w--redirected-checked';
     var FOCUSED_CLASS = 'w--redirected-focus';
+    var FOCUSED_VISIBLE_CLASS = 'w--redirected-focus-visible';
+    var focusVisibleSelectors = ':focus-visible, [data-wf-focus-visible]';
     var CUSTOM_CONTROLS = [['checkbox', CHECKBOX_CLASS_NAME], ['radio', RADIO_INPUT_CLASS_NAME]];
     $doc.on('change', namespace + " form input[type=\"checkbox\"]:not(" + CHECKBOX_CLASS_NAME + ')', function (evt) {
       $(evt.target).siblings(CHECKBOX_CLASS_NAME).toggleClass(CHECKED_CLASS);
@@ -20002,9 +20004,10 @@ Webflow.define('forms', module.exports = function ($, _) {
 
       $doc.on('focus', namespace + " form input[type=\"".concat(controlType, "\"]:not(") + customControlClassName + ')', function (evt) {
         $(evt.target).siblings(customControlClassName).addClass(FOCUSED_CLASS);
+        $(evt.target).filter(focusVisibleSelectors).siblings(customControlClassName).addClass(FOCUSED_VISIBLE_CLASS);
       });
       $doc.on('blur', namespace + " form input[type=\"".concat(controlType, "\"]:not(") + customControlClassName + ')', function (evt) {
-        $(evt.target).siblings(customControlClassName).removeClass(FOCUSED_CLASS);
+        $(evt.target).siblings(customControlClassName).removeClass("".concat(FOCUSED_CLASS, " ").concat(FOCUSED_VISIBLE_CLASS));
       });
     });
   } // Reset data common to all submit handlers

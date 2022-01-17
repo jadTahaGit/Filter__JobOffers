@@ -120,10 +120,13 @@ const createSpecialList = (element) => {
 
 let catagoryIsTheActualFilter;
 const changeFilterFieldName = (element) => {
+  console.log("Elment from ChangeFilterFieldName: " + element);
+
   let filterId =
     element.target.parentElement.parentElement.parentElement.parentElement
-      .parentElement.parentElement.firstChild.nextElementSibling
-      .lastElementChild.id;
+      .parentElement.parentElement.firstChild.lastElementChild.id;
+
+  console.log(filterId);
 
   if (filterId == "choosen__catagory") {
     catagoryIsTheActualFilter = true;
@@ -213,11 +216,9 @@ const showAllJobOffers = (event) => {
   if (specialList.length != 0) {
     hideForm();
     showElements(specialList);
-  }
-  // if the specialList is empty
-  else showForm();
+  } else showForm();
   // close Dropdown
-  closeDropdown();
+  // closeDropdown();
 };
 
 const lastShownJobOfferIndex = 9;
