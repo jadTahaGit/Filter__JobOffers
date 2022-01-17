@@ -35,9 +35,6 @@ locArray.forEach(function (elem) {
   );
 });
 
-// ################################################################################################
-// ######################################### New Test #############################################
-// ################################################################################################
 const choosenCatagory = document.getElementById("choosen__catagory");
 const choosenLocation = document.getElementById("choosen__location");
 const allElements = document.querySelectorAll(".mix.w-dyn-item.w-col.w-col-4"); // The whole list
@@ -54,80 +51,74 @@ const hideElments = (elements) => {
   });
 };
 
-let specialList = allElements;
-let lastChoosenCatagory;
-let lastChoosenLocation;
-
 const isOtherFilterToached = (element) => {
   let secondFilterInnerText;
-  if (CatagoryIsTheActualFilter) {
+  if (catagoryIsTheActualFilter) {
     secondFilterInnerText =
       element.target.parentElement.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement.children[2].children[0]
         .children[1].innerText;
-  } else if (!CatagoryIsTheActualFilter) {
+  } else if (!catagoryIsTheActualFilter) {
     secondFilterInnerText =
       element.target.parentElement.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement.children[1].children[0]
         .children[1].innerText;
   }
   return (
-    secondFilterInnerText == "Standord wählen" ||
-    secondFilterInnerText == "All" ||
-    secondFilterInnerText == "Katagorie wählen"
+    secondFilterInnerText != "Standord wählen" &&
+    secondFilterInnerText != "All" &&
+    secondFilterInnerText != "Katagorie wählen"
   );
 };
 
-const isOtherFilterStillTheSame = (element) => {
+const getSecondFilterChoice = (element) => {
   let secondFilterInnerText;
-  if (CatagoryIsTheActualFilter) {
+  if (catagoryIsTheActualFilter) {
     secondFilterInnerText =
       element.target.parentElement.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement.children[2].children[0]
         .children[1].innerText;
-    return secondFilterInnerText == lastChoosenLocation;
-  } else if (!CatagoryIsTheActualFilter) {
+  } else if (!catagoryIsTheActualFilter) {
     secondFilterInnerText =
       element.target.parentElement.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement.children[1].children[0]
         .children[1].innerText;
-    return secondFilterInnerText == lastChoosenCatagory;
   }
+  secondFilterInnerText = conv(secondFilterInnerText);
+  return secondFilterInnerText;
 };
 
-const saveLastChoice = (textContent) => {
-  if (CatagoryIsTheActualFilter) lastChoosenCatagory = textContent;
-  else lastChoosenLocation = textContent;
-};
-
+let secondFilterChoice;
+let specialList;
 const createSpecialList = (element) => {
-  let textContent = conv(element.target.textContent);
-  console.log(textContent);
-  if (isOtherFilterToached(element)) {
-    if (textContent !== null && textContent != "all") {
-      saveLastChoice(textContent);
-      specialList = document.querySelectorAll("." + textContent);
-    } else if (textContent == "all") {
-      saveLastChoice(textContent);
-      specialList = [...allElements];
-    }
+  let firstFilterChoice = conv(element.target.innerText);
+  specialList = allElements;
+  secondFilterChoice = getSecondFilterChoice(element);
+
+  if (!isOtherFilterToached(element)) {
+    if (firstFilterChoice != "all")
+      specialList = Object.values(specialList).filter((div) =>
+        div.classList.contains(firstFilterChoice)
+      );
+    else specialList = allElements;
   } else {
-    if (!isOtherFilterStillTheSame(element)) {
-      if (textContent !== null && textContent != "all") {
-        saveLastChoice(textContent);
-        specialList = Object.values(specialList).filter((div) =>
-          div.classList.contains(textContent)
-        );
-      } else if (textContent == "all") {
-        saveLastChoice(textContent);
-        console.log(specialList);
-      }
+    if (firstFilterChoice != "all") {
+      specialList = allElements;
+      specialList = Object.values(specialList).filter(
+        (div) =>
+          div.classList.contains(firstFilterChoice) &&
+          div.classList.contains(secondFilterChoice)
+      );
+    } else {
+      specialList = allElements;
+      specialList = Object.values(specialList).filter((div) =>
+        div.classList.contains(secondFilterChoice)
+      );
     }
   }
 };
 
-let CatagoryIsTheActualFilter;
-
+let catagoryIsTheActualFilter;
 const changeFilterFieldName = (element) => {
   let filterId =
     element.target.parentElement.parentElement.parentElement.parentElement
@@ -135,16 +126,47 @@ const changeFilterFieldName = (element) => {
       .lastElementChild.id;
 
   if (filterId == "choosen__catagory") {
-    CatagoryIsTheActualFilter = true;
+    catagoryIsTheActualFilter = true;
     choosenCatagory.textContent = element.target.textContent;
   } else if (filterId == "choosen__location") {
-    CatagoryIsTheActualFilter = false;
+    catagoryIsTheActualFilter = false;
     choosenLocation.textContent = element.target.textContent;
   }
 };
 
-// ################################################################################################
-// ################################################################################################
+const options = document.querySelectorAll(".html-embed-6 ");
+const hideTheSelectedOption = (element) => {
+  options.forEach((option) => {
+    if (option.children[0].innerText == element.target.innerText)
+      option.style.display = "none";
+  });
+};
+
+const showAllexceptSelected = (element) => {
+  Object.values(
+    element.target.parentElement.parentElement.parentElement.children
+  ).forEach((child) => {
+    if (child.children[0].children[0].innerText !== element.target.innerText)
+      child.children[0].style.display = "block";
+  });
+};
+
+const hideTheAllOption = () => {
+  options.forEach((option) => {
+    if (option.children[0].innerText == "All") option.style.display = "none";
+  });
+};
+
+// const closeDropdown = (event) => {
+//   // w--open
+//   event.target.className.remove("w--open");
+//   // w--open
+//   event.target.parentElement.children[0].className.remove("w--open");
+//   // Mother style="z-index: 901;"
+//   event.target.parentElement.style.z - index(0);
+//   // aria-expanded="true"
+//   event.target.parentElement.children[0].aria - expanded("false");
+// };
 
 const jobOffers = document.querySelectorAll(".mix"); // Alle Collection Kachelen
 jobOffers.forEach(function (elem, index) {
@@ -173,8 +195,11 @@ const showJobOffer = (index) => {
   return true;
 };
 
+hideTheAllOption();
 const showAllJobOffers = (event) => {
   changeFilterFieldName(event);
+  hideTheSelectedOption(event);
+  showAllexceptSelected(event);
   createSpecialList(event);
   hideNextJobOfferButton();
   for (var i = 0; i < 1000; i++) {
@@ -185,7 +210,14 @@ const showAllJobOffers = (event) => {
   // hide everythingelse
   hideElments(jobOffers);
   // Show the Clicked
-  showElements(specialList);
+  if (specialList.length != 0) {
+    hideForm();
+    showElements(specialList);
+  }
+  // if the specialList is empty
+  else showForm();
+  // close Dropdown
+  closeDropdown();
 };
 
 const lastShownJobOfferIndex = 9;
