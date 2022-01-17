@@ -160,17 +160,6 @@ const hideTheAllOption = () => {
   });
 };
 
-// const closeDropdown = (event) => {
-//   // w--open
-//   event.target.className.remove("w--open");
-//   // w--open
-//   event.target.parentElement.children[0].className.remove("w--open");
-//   // Mother style="z-index: 901;"
-//   event.target.parentElement.style.z - index(0);
-//   // aria-expanded="true"
-//   event.target.parentElement.children[0].aria - expanded("false");
-// };
-
 const jobOffers = document.querySelectorAll(".mix"); // Alle Collection Kachelen
 jobOffers.forEach(function (elem, index) {
   elem.classList.add("item-" + index);
@@ -217,8 +206,6 @@ const showAllJobOffers = (event) => {
     hideForm();
     showElements(specialList);
   } else showForm();
-  // close Dropdown
-  // closeDropdown();
 };
 
 const lastShownJobOfferIndex = 9;
@@ -244,5 +231,3 @@ const hideNextJobOfferButton = () => {
   var button = button.parentElement;
   button.classList.add("hide");
 };
-
-console.clear();
