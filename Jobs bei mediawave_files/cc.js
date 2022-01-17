@@ -1,0 +1,1 @@
+if(console){var cookiedomainwarning='Error: The domain MEDIAWAVE-JOBS.WEBFLOW.IO is not authorized to show the cookie banner for domain group ID 4d5ac979-fb23-40c3-b045-27315973ae1d. Please add it to the domain group in the Cookiebot Manager to authorize the domain.';if(typeof console.warn === 'function'){console.warn(cookiedomainwarning)}else{console.log(cookiedomainwarning)}};
